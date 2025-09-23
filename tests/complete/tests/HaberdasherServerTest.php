@@ -88,4 +88,73 @@ final class HaberdasherServerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, $resp->getStatusCode());
         $this->assertEquals('{"size":1}', $resp->getBody()->getContents());
     }
+
+    public function testItEmitsDefaultValuesWhenEmitJsonDefaultsIsTrue(): void
+    {
+        $haberdasher = $this->prophesize(Haberdasher::class);
+
+        $haberdasherServer = new HaberdasherServer($haberdasher->reveal(), null, null, null, '/twirp', true);
+
+        $hat = new Hat();
+        $hat->setSize(1);
+        // Don't set color or name, so they will have default values
+
+        $haberdasher->MakeHat(Argument::any(), Argument::type(Size::class))->willReturn($hat);
+
+        $req = new ServerRequest(
+            'POST',
+            '/twirp/twirp.tests.complete.proto.Haberdasher/MakeHat',
+            ['Content-Type' => 'application/json'],
+            '{}'
+        );
+
+        $resp = $haberdasherServer->handle($req);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+        // With emitJsonDefaults=true, all fields should be included even if they have default values
+        $this->assertEquals('{"size":1,"color":"","name":""}', $resp->getBody()->getContents());
+    }
+
+    public function testItSkipsDefaultValuesWhenEmitJsonDefaultsIsFalse(): void
+    {
+        $haberdasher = $this->prophesize(Haberdasher::class);
+
+        $haberdasherServer = new HaberdasherServer($haberdasher->reveal(), null, null, null, '/twirp', false);
+
+        $hat = new Hat();
+        $hat->setSize(1);
+        // Don't set color or name, so they will have default values
+
+        $haberdasher->MakeHat(Argument::any(), Argument::type(Size::class))->willReturn($hat);
+
+        $req = new ServerRequest(
+            'POST',
+            '/twirp/twirp.tests.complete.proto.Haberdasher/MakeHat',
+            ['Content-Type' => 'application/json'],
+            '{}'
+        );
+
+        $resp = $haberdasherServer->handle($req);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+        // With emitJsonDefaults=false, only non-default values should be included
+        $this->assertEquals('{"size":1}', $resp->getBody()->getContents());
+    }
+
+    public function testEmitJsonDefaultsGetterAndSetter(): void
+    {
+        $haberdasher = $this->prophesize(Haberdasher::class);
+        $haberdasherServer = new HaberdasherServer($haberdasher->reveal(), null, null, null, '/twirp', false);
+
+        // Test initial value
+        $this->assertFalse($haberdasherServer->getEmitJsonDefaults());
+
+        // Test setter
+        $haberdasherServer->setEmitJsonDefaults(true);
+        $this->assertTrue($haberdasherServer->getEmitJsonDefaults());
+
+        // Test setter again
+        $haberdasherServer->setEmitJsonDefaults(false);
+        $this->assertFalse($haberdasherServer->getEmitJsonDefaults());
+    }
 }

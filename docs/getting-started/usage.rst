@@ -127,6 +127,54 @@ works perfectly as well:
     echo $response->getBody();
 
 
+JSON Serialization Options
+---------------------------
+
+By default, Twirp PHP skips default values in JSON responses to keep the payload size small. However, you can configure the server to include default values in JSON responses by setting the ``emitJsonDefaults`` parameter to ``true``.
+
+**Server Configuration:**
+
+.. code-block:: php
+
+    <?php
+
+    require __DIR__.'/vendor/autoload.php';
+
+    $request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
+
+    $server = new \Twirp\Server();
+    // Set emitJsonDefaults=true to include default values in JSON responses
+    $handler = new \Twirp\Example\Haberdasher\HaberdasherServer(
+        new \Twirp\Demo\Haberdasher(),
+        null, // ServerHooks
+        null, // ResponseFactoryInterface
+        null, // StreamFactoryInterface
+        '/twirp', // prefix
+        true // emitJsonDefaults
+    );
+    $server->registerServer(\Twirp\Example\Haberdasher\HaberdasherServer::PATH_PREFIX, $handler);
+
+**Runtime Configuration:**
+
+You can also modify the ``emitJsonDefaults`` setting after server creation using the getter and setter methods:
+
+.. code-block:: php
+
+    <?php
+
+    $server = new \Twirp\Example\Haberdasher\HaberdasherServer($service);
+
+    // Check current setting
+    $currentSetting = $server->getEmitJsonDefaults(); // false by default
+
+    // Change the setting
+    $server->setEmitJsonDefaults(true); // Now includes default values in responses
+
+    $response = $server->handle($request);
+
+    // ... rest of the server code
+
+
 Use the client
 --------------
 

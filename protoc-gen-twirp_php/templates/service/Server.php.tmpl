@@ -60,12 +60,34 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
      */
     private $prefix;
 
+    /**
+     * @var bool
+     */
+    private bool $emitJsonDefaults;
+
+    /**
+     * Get the current emitJsonDefaults setting.
+     */
+    public function getEmitJsonDefaults(): bool
+    {
+        return $this->emitJsonDefaults;
+    }
+
+    /**
+     * Set the emitJsonDefaults setting.
+     */
+    public function setEmitJsonDefaults(bool $emitJsonDefaults): void
+    {
+        $this->emitJsonDefaults = $emitJsonDefaults;
+    }
+
     public function __construct(
         {{ .Service | phpServiceName .File }} $svc,
         ?ServerHooks $hook = null,
         ?ResponseFactoryInterface $responseFactory = null,
         ?StreamFactoryInterface $streamFactory = null,
-        string $prefix = '/twirp'
+        string $prefix = '/twirp',
+        bool $emitJsonDefaults = false
     ) {
         if ($hook === null) {
             $hook = new BaseServerHooks();
@@ -84,6 +106,7 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
         $this->responseFactory = $responseFactory;
         $this->streamFactory = $streamFactory;
         $this->prefix = rtrim($prefix, '/');
+        $this->emitJsonDefaults = $emitJsonDefaults;
     }
 
     /**
@@ -199,6 +222,9 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
         }
 
         $data = $out->serializeToJsonString();
+        if ($this->emitJsonDefaults) {
+            $data = $this->populateDefaults($data, $out);
+        }
 
         $body = $this->streamFactory->createStream($data);
 
@@ -372,4 +398,51 @@ final class {{ .Service | phpServiceName .File }}Server implements RequestHandle
             // so anyway.
         }
     }
+
+    /**
+     * Populate default values in JSON data for all message types.
+     */
+    private function populateDefaults(string $jsonData, \Google\Protobuf\Internal\Message $message): string
+    {
+        $data = json_decode($jsonData, true);
+        if ($data === null) {
+            return $jsonData;
+        }
+
+        // Get the class name to determine which defaults to apply
+        $className = get_class($message);
+
+        switch ($className) {
+{{- range $method := .Service.Methods }}
+{{- $outputType := $method.Output | phpMessageName $.File }}
+            case '{{ $outputType | trimPrefix "\\" }}':
+                $data = $this->populate{{ $method.Output.Desc.Name }}Defaults($data, $message);
+                break;
+{{- end }}
+            default:
+                // For unknown message types, return original data
+                break;
+        }
+
+        return json_encode($data);
+    }
+
+{{- range $method := .Service.Methods }}
+{{- $outputType := $method.Output | phpMessageName $.File }}
+    /**
+     * Populate default values for {{ $outputType }} message.
+     */
+    private function populate{{ $method.Output.Desc.Name }}Defaults(array $data, {{ $outputType }} $message): array
+    {
+{{- range $field := $method.Output.Fields }}
+        // Ensure {{ $field.Desc.Name }} field is present
+        if (!array_key_exists('{{ $field.Desc.Name }}', $data)) {
+            $data['{{ $field.Desc.Name }}'] = $message->get{{ printf "%s" $field.Desc.Name | title }}();
+        }
+{{- end }}
+        return $data;
+    }
+
+{{- end }}
+
 }
