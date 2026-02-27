@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace {{ .File | phpNamespace }};
 
-use GuzzleHttp\Promise\PromiseInterface;
-
 /**
  *{{ .Service.Comments.Leading | protoSplitComments | join "\n *" }}
  *

@@ -103,7 +103,7 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
     /**
      * Async version of {{ $method.Desc.Name }} that returns a promise.
      * 
-     * @param array $ctx Context array
+     * @param array<string, mixed> $ctx Context array
      * @param {{ $inputType }} $in Request message
      * @return PromiseInterface A promise that resolves to {{ $method.Output | phpMessageName $.File }}
      */
@@ -136,7 +136,7 @@ abstract class {{ .Service | phpServiceName .File }}AbstractClient
      * Common code to make an async request to the remote twirp service.
      * Returns a promise that resolves to void when the $out message is populated.
      * 
-     * @param array $ctx Context array
+     * @param array<string, mixed> $ctx array
      * @param string $url The URL to send the request to
      * @param Message $in The input message to serialize and send
      * @param Message $out The output message to populate with the response

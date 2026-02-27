@@ -24,7 +24,7 @@ interface {{ .Service | phpServiceName .File }}AsyncClient extends {{ .Service |
      *
      * Generated from protobuf method <code>{{ $method | protoMethodFullName }}</code>
      *
-     * @param array $ctx Context array
+     * @param array<string, mixed> $ctx
      * @param {{ $inputType }} $req Request message
      * @return PromiseInterface A promise that resolves to {{ $method.Output | phpMessageName $.File }}
      */

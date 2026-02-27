@@ -43,9 +43,6 @@ final class {{ .Service | phpServiceName .File }}JsonClient extends {{ .Service 
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function doRequestAsync(array $ctx, string $url, Message $in, Message $out): PromiseInterface
     {
         // Check if the HTTP client supports async operations (e.g., Guzzle)
@@ -60,7 +57,6 @@ final class {{ .Service | phpServiceName .File }}JsonClient extends {{ .Service 
         $body = $in->serializeToJsonString();
         $req = $this->newRequest($ctx, $url, $body, 'application/json');
 
-        // Send async request using Guzzle's sendAsync
         return $this->httpClient->sendAsync($req)->then(
             function ($resp) use ($out) {
                 if ($resp->getStatusCode() !== 200) {

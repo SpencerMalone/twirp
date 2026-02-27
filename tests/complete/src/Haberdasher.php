@@ -2,8 +2,6 @@
 
 namespace Twirp\Tests\Complete;
 
-use GuzzleHttp\Promise\Create;
-use GuzzleHttp\Promise\PromiseInterface;
 use Twirp\Tests\Complete\Proto\Hat;
 use Twirp\Tests\Complete\Proto\Size;
 

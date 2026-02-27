@@ -1,2 +1,99 @@
 parameters:
 	ignoreErrors:
+######## START OF ASYNC BASELINES DUE TO OPTIONAL REQUIREMENTS ########
+		-
+			message: '#^Call to an undefined method Psr\\Http\\Client\\ClientInterface\:\:sendAsync\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherClient.php
+
+		-
+			message: '#^Cannot call method getBody\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherClient.php
+
+		-
+			message: '#^Cannot call method getStatusCode\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherClient.php
+
+		-
+			message: '#^Cannot call method then\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherClient.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherClient.php
+
+		-
+			message: '#^Method Twitch\\Twirp\\Example\\HaberdasherClient\:\:doRequestAsync\(\) should return GuzzleHttp\\Promise\\PromiseInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherClient.php
+
+		-
+			message: '#^Parameter \#1 \$resp of method Twitch\\Twirp\\Example\\HaberdasherAbstractClient\:\:errorFromResponse\(\) expects Psr\\Http\\Message\\ResponseInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherClient.php
+
+		-
+			message: '#^Parameter \#2 \$e of method Twitch\\Twirp\\Example\\HaberdasherAbstractClient\:\:clientError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherClient.php
+
+		-
+			message: '#^Call to an undefined method Psr\\Http\\Client\\ClientInterface\:\:sendAsync\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherJsonClient.php
+
+		-
+			message: '#^Cannot call method getBody\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherJsonClient.php
+
+		-
+			message: '#^Cannot call method getStatusCode\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherJsonClient.php
+
+		-
+			message: '#^Cannot call method then\(\) on mixed\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherJsonClient.php
+
+		-
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherJsonClient.php
+
+		-
+			message: '#^Method Twitch\\Twirp\\Example\\HaberdasherJsonClient\:\:doRequestAsync\(\) should return GuzzleHttp\\Promise\\PromiseInterface but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherJsonClient.php
+
+		-
+			message: '#^Parameter \#1 \$resp of method Twitch\\Twirp\\Example\\HaberdasherAbstractClient\:\:errorFromResponse\(\) expects Psr\\Http\\Message\\ResponseInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherJsonClient.php
+
+		-
+			message: '#^Parameter \#2 \$e of method Twitch\\Twirp\\Example\\HaberdasherAbstractClient\:\:clientError\(\) expects Throwable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: example/generated/Twitch/Twirp/Example/HaberdasherJsonClient.php
+######## END OF ASYNC BASELINES DUE TO OPTIONAL REQUIREMENTS ########
