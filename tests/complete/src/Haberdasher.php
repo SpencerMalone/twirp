@@ -18,10 +18,4 @@ final class Haberdasher implements \Twirp\Tests\Complete\Proto\Haberdasher
 
         return $hat;
     }
-
-    public function MakeHatAsync(array $ctx, Size $size): PromiseInterface
-    {
-        // For server implementations, wrap the sync call in a resolved promise
-        return Create::promiseFor($this->MakeHat($ctx, $size));
-    }
 }

@@ -14,19 +14,20 @@ use GuzzleHttp\Promise\PromiseInterface;
  *
  * Generated from protobuf service <code>{{ .Service.Desc.FullName }}</code>
  */
-interface {{ .Service | phpServiceName .File }}
+interface {{ .Service | phpServiceName .File }}AsyncClient extends {{ .Service | phpServiceName .File }}
 {
 {{- range $method := .Service.Methods }}
 {{- $inputType := $method.Input | phpMessageName $.File }}
     /**
+     * Async version of {{ $method.Desc.Name }} that returns a promise.
      *{{ $method.Comments.Leading | protoSplitComments | join "\n     *" }}
      *
      * Generated from protobuf method <code>{{ $method | protoMethodFullName }}</code>
      *
-     * @param array<string, mixed> $ctx
-     *
-     * @throws \Twirp\Error
+     * @param array $ctx Context array
+     * @param {{ $inputType }} $req Request message
+     * @return PromiseInterface A promise that resolves to {{ $method.Output | phpMessageName $.File }}
      */
-    public function {{ $method.Desc.Name }}(array $ctx, {{ $inputType }} $req): {{ $method.Output | phpMessageName $.File }};
+    public function {{ $method.Desc.Name }}Async(array $ctx, {{ $inputType }} $req): PromiseInterface;
 {{ end -}}
 }
